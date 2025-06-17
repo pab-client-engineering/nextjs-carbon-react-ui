@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ai-frontend
+spec:
+  path: /
+  to:
+    kind: Service
+    name: ai-frontend-service
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge    

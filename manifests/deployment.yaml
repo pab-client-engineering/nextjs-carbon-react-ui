@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-frontend
+  labels:
+    app: ai-frontend
+spec:
+  selector:
+    matchLabels:
+      app: ai-frontend  
+  template:
+    metadata:
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'    
+      labels:
+        app: ai-frontend
+    spec:
+      containers:
+      - name: ai-frontend-container
+        image: ai-frontend:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - secretRef:
+              name: ai-frontend-secret   
