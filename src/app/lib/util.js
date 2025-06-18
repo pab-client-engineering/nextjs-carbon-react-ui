@@ -1,8 +1,10 @@
 import { SPACE_ID, API_KEY, BASE_DEPLOYMENT_URL } from "./variables";
 
 // These values will be computed
+
 const VERSION = "2025-01-01";
 const IAM_STAGE = BASE_DEPLOYMENT_URL.includes("wml-fvt") ? "staging" : "production";
+
 
 export const URLS = {
   deploymentUrl: `${BASE_DEPLOYMENT_URL}?space_id=${SPACE_ID}&version=${VERSION}`,

@@ -5,11 +5,11 @@ RUN npm -v
 ENV PORT 8080
 WORKDIR /usr/src/app
 RUN mkdir -p /usr/src/app/.next/cache/images
+RUN chown -R 1001:0 /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-RUN chown -R 1001:0 /usr/src/app
 USER 1001
 EXPOSE 8080
 CMD [ "npm", "start" ]

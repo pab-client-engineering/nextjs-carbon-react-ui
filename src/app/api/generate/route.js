@@ -4,6 +4,8 @@ import { URLS, getToken } from "../../lib/util";
 
 export async function POST(req) {
   try {
+    console.log('URLS:');
+    console.log(URLS);
     const token = await getToken();
     const body = await req.json();
     const messages = body.messages;
