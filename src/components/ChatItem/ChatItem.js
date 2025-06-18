@@ -202,9 +202,12 @@ const ChatItem = memo(
               )}
               <div className="qa-panel__itemContent">
                 {emptyContent}
-                {message.status === MESSAGE_STATUS.READY &&
-                  message.role === MESSAGE_ROLE.USER &&
-                  message.content}
+                {message.status === MESSAGE_STATUS.READY && message.role === MESSAGE_ROLE.USER && (
+                  <div>
+                    <p>{String(message.content).split(";;")[0].trim()}</p>
+                    <p>{String(message.content).split(";;")[1]?.trim()}</p>
+                  </div>
+                )}
                 {!isEmpty && message.role === MESSAGE_ROLE.ASSISTANT && (
                   <AnswerContent content={message.content} aborted={message.aborted} />
                 )}

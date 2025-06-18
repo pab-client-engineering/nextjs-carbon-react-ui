@@ -18,3 +18,14 @@
 .cds--loading-overlay {
   background-color: $layer-01;
 }
+.cds--btn--primary {
+  height: 50px;
+}
+
+.cds--form-item {
+  flex-direction: unset;
+}
+
+.cds--layout--size-md {
+  --cds-layout-size-height-context: unset;
+}

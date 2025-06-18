@@ -5,9 +5,10 @@ import { useState, useContext, useRef, useCallback } from "react";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { DeploymentContext } from "../../contexts/deployment-context";
 import _get from "lodash/get";
-
+import { FileUploader } from "@carbon/react";
 import QAPanel from "../../components/QAPanel/QAPanel";
 import { MESSAGE_ROLE, MESSAGE_STATUS } from "@/utils/constants";
+import { BACKEND_URL } from "../lib/variables";
 
 export default function LandingPage() {
   const deployment = useContext(DeploymentContext);
@@ -16,6 +17,12 @@ export default function LandingPage() {
   const shouldAutoScrollRef = useRef(true);
   const autoScrollIntersectorRef = useRef(null);
   const controllerRef = useRef(null);
+
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [isNewFile, setIsNewFile] = useState(false);
+  const [oldFileName, setOldFileName] = useState("");
+
+  let url_backend = BACKEND_URL;
 
   // useChatAutoScrollDetector(autoScrollIntersectorRef, shouldAutoScrollRef);
 
@@ -125,14 +132,13 @@ export default function LandingPage() {
           currentStep.tool_name = toolName;
           currentStep.tool_input = toolArguments;
           currentStep.id = id;
-          currentStep.definition = toolName; // We should really show input
+          currentStep.definition = toolName;
           updateFn();
         } else if (message.role === "tool") {
           // Tool end
           const id = message.tool_call_id;
           for (const step of reply.plan.steps) {
             if (id === step.id && message.name === step.tool_name) {
-              // Found it - update
               step.state = "finished";
               step.evidence = message.content;
               step.success = true;
@@ -180,11 +186,19 @@ export default function LandingPage() {
 
   const _onInput = async (input) => {
     setIsGenerating(true);
+    let content = input;
+    console.log("Plik:", uploadedFile);
+    if (uploadedFile) {
+      const myData = await getContext(input);
+      content = input + " ;; Context from document:  " + myData;
+      console.log("Content: ", content);
+    }
+
     let newMessages = [...messages];
     controllerRef.current = new AbortController();
     const message = {
       role: MESSAGE_ROLE.USER,
-      content: input,
+      content: content,
       status: MESSAGE_STATUS.READY,
       timestamp: Date.now(),
     };
@@ -235,12 +249,56 @@ export default function LandingPage() {
     controllerRef.current = null;
   }, []);
 
+  async function getContext(query) {
+    try {
+      if (!uploadedFile) return;
+
+      console.log("Files: ", isNewFile, oldFileName);
+      const data = new FormData();
+      data.append("file", uploadedFile);
+      data.append("filename", uploadedFile.name);
+      data.append("query", query);
+      data.append("new_file", isNewFile);
+      data.append("old_file_name", oldFileName);
+      const response = await fetch(url_backend + "/context", {
+        method: "POST",
+        body: data,
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const datas = await response.json();
+      setOldFileName(datas["fileName"]);
+      setIsNewFile(false);
+      return datas["context"];
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
+
+  function saveFile(file) {
+    setUploadedFile(file);
+    setIsNewFile(true);
+  }
+
   return (
     <div className="landing-page__container">
       {!deployment && <Loading />}
       {deployment && (
         <div className="landing-page__commandPanel">
-          <Button onClick={handleNewChat}>New chat</Button>
+          <Button onClick={handleNewChat}>Nowa konwersacja</Button>
+          <FileUploader
+            accept={[".pdf"]}
+            buttonLabel="Dodaj plik"
+            filenameStatus="edit"
+            iconDescription="Usuń plik"
+            name=""
+            onChange={(e) => saveFile(e.target.files[0])}
+            onClick={(e) => (e.target.value = null)}
+            onDelete={function noRefCheck() {}}
+            className="btn"
+            style={{ marginLeft: 10 }}
+          />
         </div>
       )}
       {deployment && (

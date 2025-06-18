@@ -44,7 +44,7 @@ const QAPanel = ({ messages, onInput, onAbort, intersectorRef, isRunning }) => {
         <div className="qa-panel__inputWrapper">
           <PlainTextPlugin
             contentEditable={<ContentEditable className="qa-panel__input" />}
-            placeholder={<div className="qa-panel__inputPlaceholder">Type something...</div>}
+            placeholder={<div className="qa-panel__inputPlaceholder">Napisz wiadomość...</div>}
             ErrorBoundary={LexicalErrorBoundary}
           />
         </div>
