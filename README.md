@@ -58,6 +58,7 @@ Then navigate to http://localhost:3000 in your browser.
 
 
 Docker commands:
-
+```bash
 docker build --no-cache -t ai-frontend .
 docker run -d --rm --env-file=.env -p 8080:8080 ai-frontend
+```
