@@ -8,7 +8,9 @@ import _get from "lodash/get";
 import { FileUploader } from "@carbon/react";
 import QAPanel from "../../components/QAPanel/QAPanel";
 import { MESSAGE_ROLE, MESSAGE_STATUS } from "@/utils/constants";
-import { BACKEND_URL } from "../lib/variables";
+
+import { useEffect } from "react";
+// import { BACKEND_URL } from "../lib/variables";
 
 export default function LandingPage() {
   const deployment = useContext(DeploymentContext);
@@ -22,7 +24,21 @@ export default function LandingPage() {
   const [isNewFile, setIsNewFile] = useState(false);
   const [oldFileName, setOldFileName] = useState("");
 
-  let url_backend = BACKEND_URL;
+  //const staticData = fetch('/api/env', { cache: 'force-cache' });
+  //const env = staticData.json();
+  const [config, setConfig] = useState(null);
+
+  useEffect(() => {
+    async function loadConfig() {
+      const res = await fetch('/api/env');
+      const data = await res.json();
+      setConfig(data);
+    }
+
+    loadConfig();
+  }, []);  
+
+  //let url_backend = config.backend_url;//BACKEND_URL;//env.backend_url;
 
   // useChatAutoScrollDetector(autoScrollIntersectorRef, shouldAutoScrollRef);
 
@@ -260,7 +276,7 @@ export default function LandingPage() {
       data.append("query", query);
       data.append("new_file", isNewFile);
       data.append("old_file_name", oldFileName);
-      const response = await fetch(url_backend + "/context", {
+      const response = await fetch(config.backend_url + "/context", {
         method: "POST",
         body: data,
       });
