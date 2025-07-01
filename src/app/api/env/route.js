@@ -4,7 +4,7 @@ export async function GET() {
   try {
     console.log("env called");
     const config = { 
-      backend_url: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost'
+      backend_url: process.env.FLASK_BACKEND_URL || 'http://localhost'
     };
 
 

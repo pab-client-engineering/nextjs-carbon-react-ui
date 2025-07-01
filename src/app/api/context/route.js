@@ -21,7 +21,7 @@ export async function POST(req) {
     backendForm.append("old_file_name", old_file_name);
 
     // Call Flask backend with all the data
-    const flaskUrl=process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080'
+    const flaskUrl=process.env.FLASK_BACKEND_URL || 'http://localhost:8080'
     const response = await fetch(`${flaskUrl}/context`, {
       method: "POST",
       body: backendForm,
