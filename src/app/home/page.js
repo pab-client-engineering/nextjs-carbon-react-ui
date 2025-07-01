@@ -9,7 +9,7 @@ import { FileUploader } from "@carbon/react";
 import QAPanel from "../../components/QAPanel/QAPanel";
 import { MESSAGE_ROLE, MESSAGE_STATUS } from "@/utils/constants";
 
-import { useEffect } from "react";
+// gas import { useEffect } from "react";
 // import { BACKEND_URL } from "../lib/variables";
 
 export default function LandingPage() {
@@ -24,8 +24,8 @@ export default function LandingPage() {
   const [isNewFile, setIsNewFile] = useState(false);
   const [oldFileName, setOldFileName] = useState("");
 
-  //const staticData = fetch('/api/env', { cache: 'force-cache' });
-  //const env = staticData.json();
+ 
+  /* gas - not needed after document post changes
   const [config, setConfig] = useState(null);
 
   useEffect(() => {
@@ -37,6 +37,7 @@ export default function LandingPage() {
 
     loadConfig();
   }, []);  
+*/
 
   //let url_backend = config.backend_url;//BACKEND_URL;//env.backend_url;
 
