@@ -276,21 +276,32 @@ export default function LandingPage() {
       data.append("query", query);
       data.append("new_file", isNewFile);
       data.append("old_file_name", oldFileName);
+
+      const response = await fetch("/api/context", {
+        method: "POST",
+        body: data,
+      });
+      /*
       const response = await fetch(config.backend_url + "/context", {
         method: "POST",
         body: data,
       });
+      */
+
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        console.log(response.status)
+        throw new Error("Response error");
       }
-      const datas = await response.json();
-      setOldFileName(datas["fileName"]);
+
+      const result = await response.json();
+      setOldFileName(result["fileName"]);
       setIsNewFile(false);
-      return datas["context"];
+      return result["context"];
     } catch (error) {
       console.error("Fetch error:", error);
     }
   }
+
 
   function saveFile(file) {
     setUploadedFile(file);
