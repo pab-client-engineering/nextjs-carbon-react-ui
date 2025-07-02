@@ -13,6 +13,10 @@ import { MESSAGE_ROLE, MESSAGE_STATUS } from "@/utils/constants";
 import { useAppContext } from "@/contexts/app-context";
 import { getUserInitials, mapUserColor } from "@/utils/user-util";
 
+// gas - for debug param
+import { useSearchParams } from 'next/navigation'
+
+
 const MESSAGE_ANIMATION_DURATION = parseInt(moderate01, 10);
 
 const converter = new Showdown.Converter({
@@ -179,6 +183,11 @@ const ChatItem = memo(
 
     const itemId = last ? "last-answer" : message.timestamp;
 
+    // debug
+    const searchParams = useSearchParams()
+    const debugParam = searchParams.has('debug')
+    console.log("debug: ", debugParam)
+
     return (
       <Transition in appear nodeRef={nodeRef} timeout={MESSAGE_ANIMATION_DURATION}>
         {(state) => (
@@ -205,7 +214,7 @@ const ChatItem = memo(
                 {message.status === MESSAGE_STATUS.READY && message.role === MESSAGE_ROLE.USER && (
                   <div>
                     <p>{String(message.content).split(";;")[0].trim()}</p>
-                    <p>{String(message.content).split(";;")[1]?.trim()}</p>
+                    <p>{debugParam?(String(message.content).split(";;")[1]?.trim()):""}</p>
                   </div>
                 )}
                 {!isEmpty && message.role === MESSAGE_ROLE.ASSISTANT && (
