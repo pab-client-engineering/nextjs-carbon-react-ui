@@ -150,7 +150,7 @@ const ChatItem = memo(
 
     const _renderReasoning = () => (
       <details className="qa-panel__reasoningSection">
-        <summary>How did I get this answer?</summary>
+        <summary>Jak znalazłem odpowiedź?</summary>
         {_renderSteps(message.plan.steps)}
       </details>
     );
@@ -213,8 +213,12 @@ const ChatItem = memo(
                 {emptyContent}
                 {message.status === MESSAGE_STATUS.READY && message.role === MESSAGE_ROLE.USER && (
                   <div>
-                    <p>{String(message.content).split(";;")[0].trim()}</p>
-                    <p>{debugParam?(String(message.content).split(";;")[1]?.trim()):""}</p>
+                    <p>{String(message.content).split("Context:")[0].trim()}</p>
+                    <p style={{color: "#95abcf"}}>
+                      {debugParam && message.content.includes("Context:")
+                      ? "Treść dokumentu: \"" + String(message.content).split("Context:")[1].trim() + '"'
+                      : null}
+                    </p>
                   </div>
                 )}
                 {!isEmpty && message.role === MESSAGE_ROLE.ASSISTANT && (
@@ -239,3 +243,4 @@ const ChatItem = memo(
 );
 
 export default ChatItem;
+

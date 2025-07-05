@@ -9,9 +9,6 @@ import { FileUploader } from "@carbon/react";
 import QAPanel from "../../components/QAPanel/QAPanel";
 import { MESSAGE_ROLE, MESSAGE_STATUS } from "@/utils/constants";
 
-// gas import { useEffect } from "react";
-// import { BACKEND_URL } from "../lib/variables";
-
 export default function LandingPage() {
   const deployment = useContext(DeploymentContext);
   const [messages, setMessages] = useState([]);
@@ -23,23 +20,6 @@ export default function LandingPage() {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [isNewFile, setIsNewFile] = useState(false);
   const [oldFileName, setOldFileName] = useState("");
-
- 
-  /* gas - not needed after document post changes
-  const [config, setConfig] = useState(null);
-
-  useEffect(() => {
-    async function loadConfig() {
-      const res = await fetch('/api/env');
-      const data = await res.json();
-      setConfig(data);
-    }
-
-    loadConfig();
-  }, []);  
-*/
-
-  //let url_backend = config.backend_url;//BACKEND_URL;//env.backend_url;
 
   // useChatAutoScrollDetector(autoScrollIntersectorRef, shouldAutoScrollRef);
 
@@ -207,7 +187,7 @@ export default function LandingPage() {
     console.log("Plik:", uploadedFile);
     if (uploadedFile) {
       const myData = await getContext(input);
-      content = input + " ;; Context from document:  " + myData;
+      content = input + " Context: " + myData;
       console.log("Content: ", content);
     }
 
@@ -309,6 +289,11 @@ export default function LandingPage() {
     setIsNewFile(true);
   }
 
+  function deleteFile() {
+    setUploadedFile();
+    setIsNewFile(true);
+  }
+
   return (
     <div className="landing-page__container">
       {!deployment && <Loading />}
@@ -323,7 +308,7 @@ export default function LandingPage() {
             name=""
             onChange={(e) => saveFile(e.target.files[0])}
             onClick={(e) => (e.target.value = null)}
-            onDelete={function noRefCheck() {}}
+            onDelete={deleteFile}
             className="btn"
             style={{ marginLeft: 10 }}
           />
