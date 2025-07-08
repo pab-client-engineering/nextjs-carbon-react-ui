@@ -299,7 +299,7 @@ export default function LandingPage() {
       {!deployment && <Loading />}
       {deployment && (
         <div className="landing-page__commandPanel">
-          <Button onClick={handleNewChat}>Nowa konwersacja</Button>
+          <Button onClick={handleNewChat}>Nowa rozmowa</Button>
           <FileUploader
             accept={[".pdf"]}
             buttonLabel="Dodaj plik"
